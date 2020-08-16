@@ -1,11 +1,15 @@
 var express = require('express');
 var request = require('request');
-//require('dotenv').config() 
-var User=require('./lib/User')
+require('dotenv').config() 
+
+//var User=require('./lib/User')
 var mongoose=require('mongoose')
+Schema = mongoose.Schema
+//const mongoose= require('mongoose');
 //var express = require('express')
 //var request = require('request')
 //var app = express()
+const User= mongoose.model('slackUser', new Schema({ }));
 var app = express();
 const Mongo_URL="mongodb+srv://test:test@chatapp.u9lpo.mongodb.net/slack?retryWrites=true&w=majority"
 mongoose.connect(Mongo_URL || 'mongodb://localhost/test', {
@@ -19,7 +23,7 @@ mongoose.connection.on('connected', () => {
 
 var clientId = "1297494653957.1293994070806"
 var clientSecret = "b65de9809b21ff96409573920e974947"
-var REDIRECT_URI="http://b60a48ed0d79.ngrok.io"
+var REDIRECT_URI="http://1992e72f7129.ngrok.io "
 
 var app = express();
 const PORT=3000;
@@ -31,7 +35,7 @@ app.get('/', function(req, res) {
     res.send('Ngrok is working! Path Hit: ' + req.url);
 });
 
-app.get('/oauth', function(req, res) {
+app.get('/oauth', async function(req, res) {
     // When a user authorizes an app, a code query parameter is passed on the oAuth endpoint. If that code is not there, we respond with an error message
     if (!req.query.code) {
         res.status(500);
@@ -46,14 +50,18 @@ app.get('/oauth', function(req, res) {
             qs: {code: req.query.code, client_id: clientId, client_secret: clientSecret}, //Query string data
             method: 'GET', //Specify the method
 
-        }, function (error, response, body) {
+        }, async function (error, response, body) {
             if (error) {
                 console.log(error);
             } else {
-                const jsonResult=JSON.parse(body);
+                console.log(body)
+                const jsonResult=await JSON.parse(body);
+                let criteria={result:jsonResult}
+                console.log(criteria)
                 res.send(jsonResult)
                 console.log(jsonResult)
-                    User(jsonResult).save()
+                const userDoc = new User(criteria);
+                await userDoc.save();
                
                
 
@@ -90,7 +98,7 @@ app.get('/auth/redirect', (req, res) =>{
           
           res.send("Error encountered: \n"+JSON.stringify(JSONresponse)).status(200).end()
       }else{
-
+        
           console.log(JSONresponse)
           console.log("hello")
           res.send("Success!")
