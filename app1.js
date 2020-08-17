@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const axios=require('axios')
 const { createEventAdapter } = require('@slack/events-api');
-const slackSigningSecret = "c6591ee94afa784c9d71a784d29047e8";
+const slackSigningSecret = "xxxx";
 const slackEvents = createEventAdapter(slackSigningSecret);
 /* GET home page. */
 const port = 3000
