@@ -21,9 +21,9 @@ mongoose.connection.on('connected', () => {
     console.log('Mongoose is connected!!!!');
 });
 
-var clientId = "1297494653957.1293994070806"
-var clientSecret = "b65de9809b21ff96409573920e974947"
-var REDIRECT_URI="http://1992e72f7129.ngrok.io "
+var clientId = "xxxxxx"
+var clientSecret = "yyyyy"
+var REDIRECT_URI="http://zzzzzz.ngrok.io "
 
 var app = express();
 const PORT=3000;
